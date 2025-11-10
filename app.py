@@ -1,5 +1,6 @@
 import streamlit as st
 from fuzzy_engine import OutfitFuzzySystem
+import os
 
 if "fuzzy_system" not in st.session_state:
     st.session_state.fuzzy_system = OutfitFuzzySystem()
@@ -97,7 +98,7 @@ github_url = "https://github.com/aditiiprasad/FuzzFit"
 
 st.markdown('<p class="main-title">FuzzFit 👕</p>', unsafe_allow_html=True)
 st.markdown(
-    '<p class="sub-title">AI Outfit Recommender — Get intelligent outfit & color suggestions based on temperature, location, and your style</p>',
+    '<p class="sub-title">Get intelligent outfit & color suggestions based on temperature, location, and your style</p>',
     unsafe_allow_html=True,
 )
 
@@ -138,7 +139,8 @@ st.subheader("Your Recommendation")
 
 if recommend:
     rec = system.get_recommendation(temperature, occasion_val, style_val)
-    st.markdown(f"### **{rec['outfit_type']}**")
+    outfit_type = rec['outfit_type']
+    st.markdown(f"### **{outfit_type}**")
     c1, c2, c3 = st.columns(3)
     c1.metric("Temperature", f"{rec['temperature']}°C")
     c2.metric("Occasion", occasion_name)
@@ -163,16 +165,27 @@ if recommend:
     st.markdown("#### 👔 Outfit Ideas")
     for o in rec["outfit_details"]:
         st.markdown(f"- {o}")
+
+    temp_cat = "cold" if temperature < 18 else "mild" if temperature < 28 else "warm" if temperature < 35 else "hot"
+    image_folder = f"images/{outfit_type.lower().replace(' ', '_')}"
+    if os.path.exists(image_folder):
+        outfit_images = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if temp_cat in img]
+        if outfit_images:
+            st.markdown("#### 🖼️ Visual Inspiration")
+            img_cols = st.columns(len(outfit_images))
+            for i, img_path in enumerate(outfit_images):
+                with img_cols[i]:
+                    st.image(img_path, use_container_width=True, caption=f"{outfit_type} ({temp_cat.title()})")
+        else:
+            st.warning("No matching images found for this category yet.")
+    else:
+        st.warning("Image folder not found. Please add images to `/images/` directory.")
+
     st.balloons()
 else:
     st.info("Adjust your preferences from the sidebar and click 'Recommend Outfit' to see suggestions.")
 
-
-
-
-# --- Fuzzy Logic Explanation Section ---
 st.markdown("<br><br>", unsafe_allow_html=True)
-
 st.markdown(
     """
     <div style="
@@ -187,7 +200,7 @@ st.markdown(
         <h2 style="color:white; font-size:30px;">💡 How Fuzzy Logic Powers FuzzFit</h2>
         <p style="font-size:16px; line-height:1.7; text-align:justify;">
             Fuzzy Logic is an intelligent system that mimics how humans make decisions 
-            based on <b>degrees of truth</b> rather than rigid yes/no logic. 
+            based on <b>degrees of truth</b> rather than rigid yes/no logic.
             Instead of saying “it’s cold” or “it’s hot,” fuzzy logic understands that temperature can be 
             <i>somewhat cold</i> or <i>moderately warm</i>, and uses smooth transitions between these states.
         </p>
@@ -197,15 +210,6 @@ st.markdown(
             Using predefined fuzzy sets and rules, it calculates the most suitable 
             <b>outfit type</b> (like Light Casual or Formal Wear) and the matching 
             <b>color intensity</b> (Neutral, Cool, or Vibrant).
-        </p>
-        <p style="font-size:16px; line-height:1.7; text-align:justify;">
-            Behind the scenes, each input is passed through fuzzy membership functions, 
-            fuzzy rules are applied (IF–THEN logic), and the results are defuzzified into crisp output values. 
-            These values determine your final outfit and color recommendations — 
-            just like how humans make style choices based on mood, weather, and events 🌤️🎉.
-        </p>
-        <p style="font-size:16px; font-weight:600; margin-top:16px;">
-            → Powered by <b>Fuzzy Inference System (skfuzzy)</b> & <b>Streamlit</b>
         </p>
     </div>
     """,
