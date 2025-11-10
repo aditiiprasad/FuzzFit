@@ -93,7 +93,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-github_url = "https.com/yourusername/FuzzFit"
+github_url = "https://github.com/aditiiprasad/FuzzFit"
 
 st.markdown('<p class="main-title">FuzzFit 👕</p>', unsafe_allow_html=True)
 st.markdown(
@@ -167,10 +167,46 @@ if recommend:
 else:
     st.info("Adjust your preferences from the sidebar and click 'Recommend Outfit' to see suggestions.")
 
+
+
+
+# --- Fuzzy Logic Explanation Section ---
+st.markdown("<br><br>", unsafe_allow_html=True)
+
 st.markdown(
     """
-    <div class="footer">
-        Made with 💖 using Streamlit & Fuzzy Logic
+    <div style="
+        background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+        padding: 40px 24px;
+        border-radius: 16px;
+        color: white;
+        margin-top: 40px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0,0,0,0.3);
+    ">
+        <h2 style="color:white; font-size:30px;">💡 How Fuzzy Logic Powers FuzzFit</h2>
+        <p style="font-size:16px; line-height:1.7; text-align:justify;">
+            Fuzzy Logic is an intelligent system that mimics how humans make decisions 
+            based on <b>degrees of truth</b> rather than rigid yes/no logic. 
+            Instead of saying “it’s cold” or “it’s hot,” fuzzy logic understands that temperature can be 
+            <i>somewhat cold</i> or <i>moderately warm</i>, and uses smooth transitions between these states.
+        </p>
+        <p style="font-size:16px; line-height:1.7; text-align:justify;">
+            In <b>FuzzFit 👕</b>, fuzzy logic takes three key inputs:
+            <b>temperature</b>, <b>occasion type</b>, and <b>personal style</b>.
+            Using predefined fuzzy sets and rules, it calculates the most suitable 
+            <b>outfit type</b> (like Light Casual or Formal Wear) and the matching 
+            <b>color intensity</b> (Neutral, Cool, or Vibrant).
+        </p>
+        <p style="font-size:16px; line-height:1.7; text-align:justify;">
+            Behind the scenes, each input is passed through fuzzy membership functions, 
+            fuzzy rules are applied (IF–THEN logic), and the results are defuzzified into crisp output values. 
+            These values determine your final outfit and color recommendations — 
+            just like how humans make style choices based on mood, weather, and events 🌤️🎉.
+        </p>
+        <p style="font-size:16px; font-weight:600; margin-top:16px;">
+            → Powered by <b>Fuzzy Inference System (skfuzzy)</b> & <b>Streamlit</b>
+        </p>
     </div>
     """,
     unsafe_allow_html=True,
